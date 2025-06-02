@@ -10,6 +10,8 @@
 /**
  * 
  */
+
+class UInputAction;
 class ASMCharacter;
 
 UCLASS()
@@ -24,20 +26,25 @@ public:
 	void SetPlayerCharacter(ASMCharacter* InCharacter);
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* MouseClickAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* TestClickAction;
+
+	// MouseClickAction
+	UFUNCTION()
+	void OnMouseClick(const FInputActionValue& Value);
+
+	// TestClickAction
+	UFUNCTION()
+	void OnTestClick(const FInputActionValue& Value);
+
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent();
 
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* MouseClickAction;
-
-	UFUNCTION()
-	void OnMouseClick(const FInputActionValue& Value);
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
@@ -45,4 +52,6 @@ private:
 
 private:
 	void SwapControllerToAIController(APawn* InPawn);
+
+	void SetupCharacterInput();
 };

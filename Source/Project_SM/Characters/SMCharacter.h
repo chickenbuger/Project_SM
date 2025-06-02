@@ -9,6 +9,8 @@
 class USpringArmComponent;
 class UCameraComponent;
 
+class UInputMappingContext;
+
 UCLASS()
 class PROJECT_SM_API ASMCharacter : public ACharacter
 {
@@ -23,6 +25,8 @@ public:
 	FORCEINLINE UCameraComponent* GetCamera() const			{ return Camera; }
 
 public:
+	void Init();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -34,6 +38,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputMappingContext* DefaultMappingContext;
 
 private:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

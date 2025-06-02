@@ -14,10 +14,13 @@ public class Project_SM : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"InputCore",
-			"EnhancedInput"
-		});
+			"EnhancedInput",
+            "GameplayAbilities",
+        });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] { 
+			"UMG",
+		});
 
         PublicIncludePaths.AddRange(new string[] {
         "Project_SM",
