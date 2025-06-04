@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "CoreMinimal.h"    
 #include "AbilitySystem/Attributes/PlayBaseAttributeSet.h"
 #include "AbilitySystemComponent.h"
 #include "HealthAttributeSet.generated.h"
@@ -21,7 +21,7 @@ public:
     UPROPERTY()
     FPlayAttributeEvent OnHealthChanged;
 
-    UPROPERTY()
+    UPROPERTY(BlueprintReadOnly, Category = "Attributes")
     FGameplayAttributeData Health;
     PLAY_ATTRIBUTE_ACCESSORS(UHealthAttributeSet, Health);
 };

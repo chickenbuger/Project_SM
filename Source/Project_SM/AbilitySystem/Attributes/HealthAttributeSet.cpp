@@ -6,8 +6,10 @@
 
 void UHealthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
-    if (Data.EvaluatedData.Attribute == GetHealthAttribute())
-    {
-        OnHealthChanged.Broadcast(Data.EvaluatedData.Magnitude, GetHealth());
-    }
+	float OldValue = Health.GetCurrentValue();
+	float NewValue = FMath::Clamp(OldValue + Data.EvaluatedData.Magnitude, 0.0f, Health.GetBaseValue());
+	SetHealth(NewValue);
+	float Delta = NewValue - OldValue;
+
+	OnHealthChanged.Broadcast(Delta, NewValue);
 }

@@ -11,6 +11,9 @@ class UCameraComponent;
 
 class UInputMappingContext;
 
+class UWidgetComponent;
+class USMPlayerInfo;
+
 UCLASS()
 class PROJECT_SM_API ASMCharacter : public ACharacter
 {
@@ -23,6 +26,7 @@ public:
 public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const	{ return SpringArm; }
 	FORCEINLINE UCameraComponent* GetCamera() const			{ return Camera; }
+	FORCEINLINE FString GetPlayerName() const				{ return PlayerName; }
 
 public:
 	void Init();
@@ -35,9 +39,14 @@ public:
 
 	void MoveToLocation(const FVector& TargetLocation);
 
+public:
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> PlayerInfoWidgetClass;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -49,4 +58,17 @@ private:
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UWidgetComponent> PlayerInfoWidgetComponent;
+
+	UPROPERTY()
+	TObjectPtr<USMPlayerInfo> PlayerInfoWidget;
+
+	UPROPERTY(Category = User, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FString PlayerName;
+
+private:
+	UFUNCTION()
+	void OnHealthChanged(float EffectMagnitude, float NewValue);
 };

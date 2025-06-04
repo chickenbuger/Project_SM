@@ -23,7 +23,12 @@ public:
 	ASMPlayerController();
 
 public:
+	/** Setter Player Character -> SMCharacter*/
 	void SetPlayerCharacter(ASMCharacter* InCharacter);
+
+	/** Getter Player Character -> SMCharacter*/
+	UFUNCTION(BlueprintCallable)
+	ASMCharacter* GetPlayerCharacter() const { return PlayerCharacter; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
