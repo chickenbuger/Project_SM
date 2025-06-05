@@ -44,6 +44,15 @@ void ASMPlayerController::OnMouseClick(const FInputActionValue& Value)
 void ASMPlayerController::OnTestClick(const FInputActionValue& Value)
 {
     UE_LOG(LogTemp, Warning, TEXT("OnTestClick"));
+
+    if (PlayerCharacter)
+    {
+        ASMCharacter* PlayerActor = Cast<ASMCharacter>(PlayerCharacter);
+        if (PlayerActor)
+        {
+            PlayerActor->TestClick();
+        }
+    }
 }
 
 void ASMPlayerController::BeginPlay()

@@ -18,6 +18,7 @@
 #include "Components/WidgetComponent.h"					// Widget Components
 
 #include "AbilitySystem/Attributes/HealthAttributeSet.h"
+#include "AbilitySystem/Ability/GA_SelfDamage.h"
 
 // Sets default values
 ASMCharacter::ASMCharacter()
@@ -83,6 +84,8 @@ void ASMCharacter::BeginPlay()
 			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
 			if (ASC)
 			{
+				ASC->GiveAbility(FGameplayAbilitySpec(UGA_SelfDamage::StaticClass(), 1, 0));
+
 				//Owner(소유자)  Avatar(실행자)	
 				ASC->InitAbilityActorInfo(PS, this);
 
@@ -188,5 +191,20 @@ void ASMCharacter::MoveToLocation(const FVector& TargetLocation)
 	if (AiControl)
 	{
 		AiControl->MoveToLocation(TargetLocation);
+	}
+}
+
+void ASMCharacter::TestClick()
+{
+	ASMPlayerState* PS = GetPlayerState<ASMPlayerState>();
+	if (PS)
+	{
+		if (PS->GetAbilitySystemComponent())
+		{
+			FGameplayTagContainer TagContainer;
+			TagContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.SelfDamage")));
+
+			PS->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(TagContainer);
+		}
 	}
 }

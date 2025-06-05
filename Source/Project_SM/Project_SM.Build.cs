@@ -16,6 +16,7 @@ public class Project_SM : ModuleRules
 			"InputCore",
 			"EnhancedInput",
             "GameplayAbilities",
+            "GameplayTags"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { 

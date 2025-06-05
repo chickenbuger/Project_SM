@@ -39,6 +39,8 @@ public:
 
 	void MoveToLocation(const FVector& TargetLocation);
 
+	void TestClick();
+
 public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UUserWidget> PlayerInfoWidgetClass;
