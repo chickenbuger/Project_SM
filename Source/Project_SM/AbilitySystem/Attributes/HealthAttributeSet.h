@@ -18,6 +18,8 @@ class PROJECT_SM_API UHealthAttributeSet : public UPlayBaseAttributeSet
 public:
     void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
+    void InitializeAttributes(float InHealth);
+
     UPROPERTY()
     FPlayAttributeEvent OnHealthChanged;
 

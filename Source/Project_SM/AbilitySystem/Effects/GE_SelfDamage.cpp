@@ -8,7 +8,7 @@ UGE_SelfDamage::UGE_SelfDamage()
 {
     // 즉각 반영
     DurationPolicy = EGameplayEffectDurationType::Instant;
-
+    
     FGameplayModifierInfo Modifier;
 
     // 조절 대상

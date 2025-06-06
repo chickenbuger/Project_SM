@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
+#include "GameplayEffectTypes.h"						// Effects (FOnAttributeChangeData)
+
 #include "SMCharacter.generated.h"
 
 class USpringArmComponent;
@@ -29,7 +32,14 @@ public:
 	FORCEINLINE FString GetPlayerName() const				{ return PlayerName; }
 
 public:
-	void Init();
+	// Init
+	void InputInit();
+	void LateInit();
+
+	// Move Character
+	void MoveToLocation(const FVector& TargetLocation);
+
+	void TestClick();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -37,9 +47,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void MoveToLocation(const FVector& TargetLocation);
-
-	void TestClick();
+public:
+	// Change Health Binding Func
+	void OnHealthChanged(const float InBaseHealth, const float InNewHealth);
 
 public:
 	UPROPERTY(EditAnywhere, Category = "UI")
@@ -69,8 +79,4 @@ private:
 
 	UPROPERTY(Category = User, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FString PlayerName;
-
-private:
-	UFUNCTION()
-	void OnHealthChanged(float EffectMagnitude, float NewValue);
 };

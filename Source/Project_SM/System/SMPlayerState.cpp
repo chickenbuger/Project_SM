@@ -14,22 +14,25 @@ ASMPlayerState::ASMPlayerState()
 	{
 		AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	}
-
-	HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttributeSet"));
+	
+	// SubObject 생성
+	{
+		HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttributeSet"));
+	}
 }
 
 void ASMPlayerState::Init()
 {
 	if (HealthAttributeSet)
 	{
+		HealthAttributeSet->InitializeAttributes(100.0f);
 		HealthAttributeSet->OnHealthChanged.AddDynamic(this, &ASMPlayerState::HandleHealthChanged);
 	}
+}
 
-	if (AbilitySystemComponent)
-	{
-		AbilitySystemComponent->SetNumericAttributeBase(UHealthAttributeSet::GetHealthAttribute(), InitialHealth);
-	}
-
+void ASMPlayerState::SetOwningPlayerCharacter(ASMCharacter* InOwningCharacter)
+{
+	OwningPlayerCharacter = InOwningCharacter;
 }
 
 UAbilitySystemComponent* ASMPlayerState::GetAbilitySystemComponent() const
@@ -39,8 +42,16 @@ UAbilitySystemComponent* ASMPlayerState::GetAbilitySystemComponent() const
 
 void ASMPlayerState::HandleHealthChanged(float Magnitude, float NewHealth)
 {
+	UE_LOG(LogTemp, Warning, TEXT("HandleHealthChanged %f"), NewHealth);
 	if (NewHealth <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("체력이 0 이하"));
+		return;
 	}
+
+	if (!OwningPlayerCharacter) return;
+
+	const float Base = HealthAttributeSet->Health.GetBaseValue();
+
+	OwningPlayerCharacter->OnHealthChanged(Base, NewHealth);
 }

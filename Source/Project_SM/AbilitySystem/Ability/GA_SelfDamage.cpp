@@ -8,6 +8,12 @@
 UGA_SelfDamage::UGA_SelfDamage()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
+    // Ability에 이 태그를 부여
+    AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.SelfDamage")));
+
+    // 이 태그로 발동될 수 있도록
+    ActivationOwnedTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.SelfDamage")));
 }
 
 void UGA_SelfDamage::ActivateAbility(

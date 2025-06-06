@@ -14,6 +14,8 @@
 class UAbilitySystemComponent;
 class UHealthAttributeSet;
 
+class ASMCharacter;
+
 UCLASS()
 class PROJECT_SM_API ASMPlayerState : public APlayerState, public IAbilitySystemInterface
 {
@@ -24,6 +26,8 @@ public:
 
 public:
 	void Init();
+
+	void SetOwningPlayerCharacter(ASMCharacter* InOwningCharacter);
 
 public:
 	// GAS ¼¼ÆÃ
@@ -41,4 +45,8 @@ public:
 
 	UFUNCTION()
 	void HandleHealthChanged(float Magnitude, float NewHealth);
+
+private:
+	UPROPERTY()
+	TObjectPtr<ASMCharacter> OwningPlayerCharacter;
 };

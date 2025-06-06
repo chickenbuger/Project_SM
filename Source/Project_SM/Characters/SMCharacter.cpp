@@ -18,7 +18,7 @@
 #include "Components/WidgetComponent.h"					// Widget Components
 
 #include "AbilitySystem/Attributes/HealthAttributeSet.h"
-#include "AbilitySystem/Ability/GA_SelfDamage.h"
+#include "AbilitySystem/Ability/GA_SelfDamage.h"		
 
 // Sets default values
 ASMCharacter::ASMCharacter()
@@ -86,10 +86,12 @@ void ASMCharacter::BeginPlay()
 			{
 				ASC->GiveAbility(FGameplayAbilitySpec(UGA_SelfDamage::StaticClass(), 1, 0));
 
+				// PlayerState에서 Character를 찾을 수 있도록 설정
+				PS->SetOwningPlayerCharacter(this);
+				PS->Init();
+
 				//Owner(소유자)  Avatar(실행자)	
 				ASC->InitAbilityActorInfo(PS, this);
-
-				PS->Init();
 			}
 		}
 	}
@@ -97,33 +99,15 @@ void ASMCharacter::BeginPlay()
 
 void ASMCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	if (ASMPlayerState* PS = GetPlayerState<ASMPlayerState>())
-	{
-		if (UHealthAttributeSet* HealthSet = PS->HealthAttributeSet)
-		{
-			HealthSet->OnHealthChanged.RemoveDynamic(this, &ASMCharacter::OnHealthChanged);
-		}
-	}
-
 	Super::EndPlay(EndPlayReason);
 }
 
-void ASMCharacter::OnHealthChanged(float EffectMagnitude, float NewValue)
+void ASMCharacter::OnHealthChanged(const float InBaseHealth, const float InNewHealth)
 {
-	if (PlayerInfoWidget)
-	{
-		ASMPlayerState* PS = GetPlayerState<ASMPlayerState>();
-		if (!PS)
-		{
-			return;
-		}
-		const float BaseHP = PS->HealthAttributeSet->Health.GetBaseValue();
-
-		PlayerInfoWidget->UpdateInfo(BaseHP, NewValue);
-	}
+	PlayerInfoWidget->UpdateInfo(InBaseHealth, InNewHealth);
 }
 
-void ASMCharacter::Init()
+void ASMCharacter::InputInit()
 {
 	// PlayerController Input Mappings
 	{
@@ -135,7 +119,10 @@ void ASMCharacter::Init()
 			}
 		}
 	}
+}
 
+void ASMCharacter::LateInit()
+{
 	// Widget Bind
 	{
 		PlayerInfoWidgetComponent->SetWidgetClass(PlayerInfoWidgetClass);
@@ -163,11 +150,10 @@ void ASMCharacter::Init()
 	{
 		if (ASMPlayerState* PS = GetPlayerState<ASMPlayerState>())
 		{
-			// HP
-			if (UHealthAttributeSet* HealthSet = PS->HealthAttributeSet)
-			{
-				HealthSet->OnHealthChanged.AddUniqueDynamic(this, &ASMCharacter::OnHealthChanged);
-			}
+			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
+			if (!ASC) return;
+
+			//ASC->GetGameplayAttributeValueChangeDelegate(UHealthAttributeSet::GetHealthAttribute()).AddUObject(this, &ASMCharacter::OnHealthChanged);
 		}
 	}
 }
@@ -196,15 +182,15 @@ void ASMCharacter::MoveToLocation(const FVector& TargetLocation)
 
 void ASMCharacter::TestClick()
 {
-	ASMPlayerState* PS = GetPlayerState<ASMPlayerState>();
-	if (PS)
+	ASMPlayerState* SMPS = GetPlayerState<ASMPlayerState>();
+	if (SMPS)
 	{
-		if (PS->GetAbilitySystemComponent())
+		if (SMPS->GetAbilitySystemComponent())
 		{
 			FGameplayTagContainer TagContainer;
 			TagContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.SelfDamage")));
 
-			PS->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(TagContainer);
+			SMPS->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(TagContainer);
 		}
 	}
 }

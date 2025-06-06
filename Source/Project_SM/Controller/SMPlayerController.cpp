@@ -9,6 +9,8 @@
 #include "InputAction.h"								// Input Action 타입
 #include "InputActionValue.h"							// InputActionValue 타입
 
+#include "System/SMPlayerState.h"                       // PlayerState
+
 ASMPlayerController::ASMPlayerController()
 {
     // 마우스 세팅
@@ -108,17 +110,31 @@ void ASMPlayerController::SwapControllerToAIController(APawn* InPawn)
         ASMAIController* AiControl = GetWorld()->SpawnActor<ASMAIController>();
         if (AiControl)
         {
-            // 카메라 자동 변환 해제
-            this->bAutoManageActiveCameraTarget = false;
+            // 컨트롤러 Swap 및 카메라 유지
+            if (PlayerCharacter)
+            {
+                // PlayerState 저장
+                ASMPlayerState* SavePS = PlayerCharacter->GetPlayerState<ASMPlayerState>();
 
-            // 기존 Controller 연결 해제
-            OnUnPossess();
+                // 카메라 자동 변환 해제
+                this->bAutoManageActiveCameraTarget = false;
 
-            // Ai Controller 연결
-            AiControl->Possess(PlayerCharacter);
+                // 기존 Controller 연결 해제
+                OnUnPossess();
 
-            // 캐릭터의 카메라를 따라가도록 연결
-            SetViewTargetWithBlend(PlayerCharacter, 0.0f);
+                // Ai Controller 연결
+                AiControl->Possess(PlayerCharacter);
+
+                // Player State 재설정
+                AiControl->PlayerState = SavePS;
+                PlayerCharacter->SetPlayerState(SavePS);
+
+                // 캐릭터의 카메라를 따라가도록 연결
+                SetViewTargetWithBlend(PlayerCharacter, 0.0f);
+            }
+
+            // Widget Bind, GAS Bind
+            PlayerCharacter->LateInit();
         }
         else
         {
@@ -132,6 +148,7 @@ void ASMPlayerController::SetupCharacterInput()
     // Input 초기화
     if (PlayerCharacter)
     {
-        PlayerCharacter->Init();
+        // EnhancedInput Setting
+        PlayerCharacter->InputInit();
     }
 }
