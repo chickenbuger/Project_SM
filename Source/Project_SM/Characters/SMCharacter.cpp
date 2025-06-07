@@ -102,9 +102,9 @@ void ASMCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-void ASMCharacter::OnHealthChanged(const float InBaseHealth, const float InNewHealth)
+void ASMCharacter::OnHealthChanged(const float InMaxHealth, const float InNewHealth)
 {
-	PlayerInfoWidget->UpdateInfo(InBaseHealth, InNewHealth);
+	PlayerInfoWidget->UpdateInfo(InMaxHealth, InNewHealth);
 }
 
 void ASMCharacter::InputInit()

@@ -25,8 +25,21 @@ void ASMPlayerState::Init()
 {
 	if (HealthAttributeSet)
 	{
-		HealthAttributeSet->InitializeAttributes(100.0f);
 		HealthAttributeSet->OnHealthChanged.AddDynamic(this, &ASMPlayerState::HandleHealthChanged);
+	}
+	
+	// HealthAttributeSet의 초기화 (Init)
+	if (AbilitySystemComponent && OwningPlayerCharacter)
+	{
+		if (!OwningPlayerCharacter->InitAttributeEffect) return;
+
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(OwningPlayerCharacter->InitAttributeEffect, 1, EffectContext);
+
+		if (SpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		}
 	}
 }
 
@@ -42,16 +55,16 @@ UAbilitySystemComponent* ASMPlayerState::GetAbilitySystemComponent() const
 
 void ASMPlayerState::HandleHealthChanged(float Magnitude, float NewHealth)
 {
-	UE_LOG(LogTemp, Warning, TEXT("HandleHealthChanged %f"), NewHealth);
-	if (NewHealth <= 0)
+	UE_LOG(LogTemp, Warning, TEXT("HandleHealthChanged %f, %f"), Magnitude, NewHealth);
+	if (NewHealth < 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("체력이 0 이하"));
+		UE_LOG(LogTemp, Warning, TEXT("체력이 0 미만"));
 		return;
 	}
 
 	if (!OwningPlayerCharacter) return;
 
-	const float Base = HealthAttributeSet->Health.GetBaseValue();
+	const float MaxHP = HealthAttributeSet->MaxHealth.GetCurrentValue();
 
-	OwningPlayerCharacter->OnHealthChanged(Base, NewHealth);
+	OwningPlayerCharacter->OnHealthChanged(MaxHP, NewHealth);
 }

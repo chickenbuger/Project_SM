@@ -18,12 +18,14 @@ class PROJECT_SM_API UHealthAttributeSet : public UPlayBaseAttributeSet
 public:
     void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
-    void InitializeAttributes(float InHealth);
-
     UPROPERTY()
     FPlayAttributeEvent OnHealthChanged;
 
     UPROPERTY(BlueprintReadOnly, Category = "Attributes")
     FGameplayAttributeData Health;
     PLAY_ATTRIBUTE_ACCESSORS(UHealthAttributeSet, Health);
+
+    UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+    FGameplayAttributeData MaxHealth;
+    PLAY_ATTRIBUTE_ACCESSORS(UHealthAttributeSet, MaxHealth);
 };

@@ -19,10 +19,10 @@ class PROJECT_SM_API USMPlayerInfo : public UUserWidget
 
 public:
 	//변경점이 체력밖에 없음
-	void UpdateInfo(const float BaseHP, float NewHp);
+	void UpdateInfo(const float InMaxHP, float InNewHp);
 
 	UFUNCTION(BlueprintCallable)
-	void SetHealthPercent(float NewPercent);
+	void SetHealthPercent(float InPercent);
 
 		UFUNCTION(BlueprintCallable)
 	void SetPlayerName(const FString& Name);

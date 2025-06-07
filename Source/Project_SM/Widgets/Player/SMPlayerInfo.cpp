@@ -10,16 +10,16 @@ void USMPlayerInfo::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void USMPlayerInfo::UpdateInfo(const float BaseHP, float NewHp)
+void USMPlayerInfo::UpdateInfo(const float InMaxHP, float InNewHp)
 {
-	SetHealthPercent(NewHp / BaseHP);
+	SetHealthPercent(InNewHp / InMaxHP);
 }
 
-void USMPlayerInfo::SetHealthPercent(float Percent)
+void USMPlayerInfo::SetHealthPercent(float InPercent)
 {
 	if (HPBar)
 	{
-		HPBar->SetHealthPercent(Percent);
+		HPBar->SetHealthPercent(InPercent);
 	}
 }
 

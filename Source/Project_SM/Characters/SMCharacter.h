@@ -17,6 +17,8 @@ class UInputMappingContext;
 class UWidgetComponent;
 class USMPlayerInfo;
 
+class UGameplayEffect;
+
 UCLASS()
 class PROJECT_SM_API ASMCharacter : public ACharacter
 {
@@ -49,12 +51,15 @@ public:
 
 public:
 	// Change Health Binding Func
-	void OnHealthChanged(const float InBaseHealth, const float InNewHealth);
+	void OnHealthChanged(const float InMaxHealth, const float InNewHealth);
 
 public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UUserWidget> PlayerInfoWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "GAS")
+	TSubclassOf<UGameplayEffect> InitAttributeEffect;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

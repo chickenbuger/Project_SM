@@ -6,18 +6,16 @@
 
 void UHealthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
-	UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute %f %f"),Health.GetCurrentValue(),Health.GetBaseValue());
-	float OldValue = Health.GetCurrentValue();
-	float NewValue = FMath::Clamp(OldValue + Data.EvaluatedData.Magnitude, 0.0f, Health.GetBaseValue());
-	
-	float Delta = Data.EvaluatedData.Magnitude;
+	UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute C %f, M %f"), Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
 
-	OnHealthChanged.Broadcast(Delta, NewValue);	
-}
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		// 현재 HP 변화
+	}
+	else if(Data.EvaluatedData.Attribute == GetMaxHealthAttribute())
+	{
+		// Max HP 변화
+	}
 
-void UHealthAttributeSet::InitializeAttributes(float InHealth)
-{
-	UE_LOG(LogTemp, Warning, TEXT("InitializeAttributes"));
-	Health.SetBaseValue(InHealth);
-	Health.SetCurrentValue(InHealth);
+	OnHealthChanged.Broadcast(Data.EvaluatedData.Magnitude,Health.GetCurrentValue());
 }
