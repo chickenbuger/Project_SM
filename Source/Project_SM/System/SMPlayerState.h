@@ -3,21 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerState.h"
-#include "AbilitySystemInterface.h"
+#include "GASPlayerState.h"
 #include "SMPlayerState.generated.h"
 
 /**
  * 
  */
 
-class UAbilitySystemComponent;
-class UHealthAttributeSet;
-
-class ASMCharacter;
-
 UCLASS()
-class PROJECT_SM_API ASMPlayerState : public APlayerState, public IAbilitySystemInterface
+class PROJECT_SM_API ASMPlayerState : public AGASPlayerState
 {
 	GENERATED_BODY()
 	
@@ -25,33 +19,12 @@ public:
 	ASMPlayerState();
 
 public:
-	void Init();
-
-	void SetOwningPlayerCharacter(ASMCharacter* InOwningCharacter);
+	virtual void Init() override;
 
 public:
-	// GAS ¼¼ÆÃ
-	FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
 	FORCEINLINE const FString GetUserName() const { return UserName; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-
-public:
-	UPROPERTY()
-	TObjectPtr<UHealthAttributeSet> HealthAttributeSet;
-
-	UPROPERTY(EditAnywhere)
-	float InitialHealth = 100.0f; // I usually define this here but set its value in BP but for now we'll do both here
-
-	UFUNCTION()
-	void HandleHealthChanged(float Magnitude, float NewHealth);
-
 private:
-	UPROPERTY()
-	TObjectPtr<ASMCharacter> OwningPlayerCharacter;
-
 	UPROPERTY(Category = User, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FString UserName;
 };

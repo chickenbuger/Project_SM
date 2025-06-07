@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "GASCharacter.h"
 
 #include "GameplayEffectTypes.h"						// Effects (FOnAttributeChangeData)
 
@@ -20,7 +20,7 @@ class USMPlayerInfo;
 class UGameplayEffect;
 
 UCLASS()
-class PROJECT_SM_API ASMCharacter : public ACharacter
+class PROJECT_SM_API ASMCharacter : public AGASCharacter
 {
 	GENERATED_BODY()
 
@@ -39,8 +39,6 @@ public:
 
 	// Move Character
 	void MoveToLocation(const FVector& TargetLocation);
-
-	void TestClick();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -11,14 +11,10 @@
 #include "GameFramework/SpringArmComponent.h"			// SpringArm
 #include "Camera/CameraComponent.h"						// Camera
 
-#include "AbilitySystemComponent.h"						// GAS
-#include "System/SMPlayerState.h"						// PlayerState
-
 #include "Widgets/Player/SMPlayerInfo.h"				// Player Info
-#include "Components/WidgetComponent.h"					// Widget Components
+#include "Components/WidgetComponent.h"					// Widget Components	
 
-#include "AbilitySystem/Attributes/HealthAttributeSet.h"
-#include "AbilitySystem/Ability/GA_SelfDamage.h"		
+#include "System/SMPlayerState.h"						// PlayerState
 
 // Sets default values
 ASMCharacter::ASMCharacter()
@@ -73,26 +69,6 @@ ASMCharacter::ASMCharacter()
 void ASMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Init GAS
-	{
-		ASMPlayerState* PS = GetPlayerState<ASMPlayerState>();
-		if (PS)
-		{
-			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
-			if (ASC)
-			{
-				ASC->GiveAbility(FGameplayAbilitySpec(UGA_SelfDamage::StaticClass(), 1, 0));
-
-				// PlayerState에서 Character를 찾을 수 있도록 설정
-				PS->SetOwningPlayerCharacter(this);
-				PS->Init();
-
-				//Owner(소유자)  Avatar(실행자)	
-				ASC->InitAbilityActorInfo(PS, this);
-			}
-		}
-	}
 }
 
 void ASMCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -143,17 +119,6 @@ void ASMCharacter::LateInit()
 			}
 		}
 	}
-
-	// Attribute Bind
-	{
-		if (ASMPlayerState* PS = GetPlayerState<ASMPlayerState>())
-		{
-			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
-			if (!ASC) return;
-
-			//ASC->GetGameplayAttributeValueChangeDelegate(UHealthAttributeSet::GetHealthAttribute()).AddUObject(this, &ASMCharacter::OnHealthChanged);
-		}
-	}
 }
 
 // Called every frame
@@ -175,20 +140,5 @@ void ASMCharacter::MoveToLocation(const FVector& TargetLocation)
 	if (AiControl)
 	{
 		AiControl->MoveToLocation(TargetLocation);
-	}
-}
-
-void ASMCharacter::TestClick()
-{
-	ASMPlayerState* SMPS = GetPlayerState<ASMPlayerState>();
-	if (SMPS)
-	{
-		if (SMPS->GetAbilitySystemComponent())
-		{
-			FGameplayTagContainer TagContainer;
-			TagContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.SelfDamage")));
-
-			SMPS->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(TagContainer);
-		}
 	}
 }
