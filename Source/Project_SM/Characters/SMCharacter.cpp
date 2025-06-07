@@ -67,8 +67,6 @@ ASMCharacter::ASMCharacter()
 		AutoPossessAI = EAutoPossessAI::Disabled;
 		AIControllerClass = nullptr;
 	}
-
-	PlayerName = "TestName";
 }
 	
 // Called when the game starts or when spawned
@@ -137,10 +135,10 @@ void ASMCharacter::LateInit()
 				// 초기 체력 설정
 				PlayerInfoWidget->SetHealthPercent(1.0f);
 				// 이름 설정
-				if (APlayerState* PS = GetPlayerState())
+				if (ASMPlayerState* PS = GetPlayerState<ASMPlayerState>())
 				{
 					// PlayerState로 옮길 예정
-					PlayerInfoWidget->SetPlayerName(PlayerName);
+					PlayerInfoWidget->SetPlayerName(PS->GetUserName());
 				}
 			}
 		}

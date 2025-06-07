@@ -6,7 +6,7 @@
 #include "Characters/SMCharacter.h"							// Ä³¸¯ÅÍ
 
 #include "AbilitySystem/Attributes/HealthAttributeSet.h"	// Hp
-#include "AbilitySystemComponent.h"							// Gas
+#include "AbilitySystemComponent.h"							// GAS
 
 ASMPlayerState::ASMPlayerState()
 {
@@ -19,6 +19,8 @@ ASMPlayerState::ASMPlayerState()
 	{
 		HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttributeSet"));
 	}
+
+	UserName = "TestJS";
 }
 
 void ASMPlayerState::Init()

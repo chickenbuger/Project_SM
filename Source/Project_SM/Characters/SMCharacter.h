@@ -31,7 +31,6 @@ public:
 public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const	{ return SpringArm; }
 	FORCEINLINE UCameraComponent* GetCamera() const			{ return Camera; }
-	FORCEINLINE FString GetPlayerName() const				{ return PlayerName; }
 
 public:
 	// Init
@@ -81,7 +80,4 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<USMPlayerInfo> PlayerInfoWidget;
-
-	UPROPERTY(Category = User, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	FString PlayerName;
 };

@@ -31,7 +31,9 @@ public:
 
 public:
 	// GAS ¼¼ÆÃ
-	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	FORCEINLINE const FString GetUserName() const { return UserName; }
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -49,4 +51,7 @@ public:
 private:
 	UPROPERTY()
 	TObjectPtr<ASMCharacter> OwningPlayerCharacter;
+
+	UPROPERTY(Category = User, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FString UserName;
 };
