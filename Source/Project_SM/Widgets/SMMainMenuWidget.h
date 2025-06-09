@@ -24,10 +24,4 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> Btn_SinglePlay;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Btn_MultiServer;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Btn_MultiClient;
 };
