@@ -15,20 +15,10 @@ void USMMainMenuWidget::NativeConstruct()
 		{
 			Btn_SinglePlay->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSingleGamePlayClicked);
 		}
-
-		if (Btn_MultiPlay)
-		{
-			Btn_MultiPlay->OnClicked.AddUniqueDynamic(this, &ThisClass::OnMultiGamePlayClicked);
-		}
 	}
 }
 
 void USMMainMenuWidget::OnSingleGamePlayClicked()
-{
-	UGameplayStatics::OpenLevel(this, FName("TestMap"),true,TEXT("?game=/Game/Game/B_SMGameMode.B_SMGameMode_C"));
-}
-
-void USMMainMenuWidget::OnMultiGamePlayClicked()
 {
 	UGameplayStatics::OpenLevel(this, FName("TestMap"));
 }

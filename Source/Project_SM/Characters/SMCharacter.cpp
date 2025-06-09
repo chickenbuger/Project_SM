@@ -63,6 +63,12 @@ ASMCharacter::ASMCharacter()
 		AutoPossessAI = EAutoPossessAI::Disabled;
 		AIControllerClass = nullptr;
 	}
+
+	// Replication
+	{
+		bReplicates = true;
+		SetReplicateMovement(true);
+	}
 }
 	
 // Called when the game starts or when spawned
