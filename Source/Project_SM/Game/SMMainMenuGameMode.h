@@ -16,7 +16,4 @@ class PROJECT_SM_API ASMMainMenuGameMode : public AGameModeBase
 	
 public:
 	ASMMainMenuGameMode();
-
-protected:
-	virtual void BeginPlay() override;
 };

@@ -11,7 +11,8 @@ public class Project_SM : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] {
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
-            "GameplayAbilities", "GameplayTags"
+            "GameplayAbilities", "GameplayTags",
+            "OnlineSubsystem", "OnlineSubsystemSteam",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { 
