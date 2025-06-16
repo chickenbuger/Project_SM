@@ -44,10 +44,8 @@ class PROJECT_SM_API USMGameInstance : public UGameInstance
 public:
     virtual void Init() override;
 
-    //void DestroyAndCreateSession();         // 技记 颇鲍 饶 积己
     void CreateSession();                   // 技记 积己
     void FindSession();                     // 技记 八祸
-    //void JoinSession(const FOnlineSessionSearchResult& Result);     // 技记 曼啊
 
 public:
     UPROPERTY(BlueprintReadOnly)
@@ -66,9 +64,4 @@ private:
 private:
     IOnlineSessionPtr SessionInterface;
     TSharedPtr<FOnlineSessionSearch> SessionSearch;
-
-    FOnCreateSessionCompleteDelegate    OnCreateSessionCompleteDelegate;
-	FOnDestroySessionCompleteDelegate   OnDestroySessionCompleteDelegate;
-	FOnFindSessionsCompleteDelegate     OnFindSessionsCompleteDelegate;
-	FOnJoinSessionCompleteDelegate      OnJoinSessionCompleteDelegate;
 };
