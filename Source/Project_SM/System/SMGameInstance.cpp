@@ -7,7 +7,6 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Online/OnlineSessionNames.h"
-#include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 
 #include "Widgets/MainMenu/SMSearchContentWidget.h"
@@ -41,6 +40,8 @@ void USMGameInstance::CreateSession()
 {
     if (!SessionInterface.IsValid()) return;
 
+    UE_LOG(LogTemp, Warning, TEXT("NetMode: %d"), GetWorld()->GetNetMode());
+
     const auto ExistingSession = SessionInterface->GetNamedSession(NAME_GameSession); // 
     if (ExistingSession != nullptr)
     {
@@ -51,12 +52,14 @@ void USMGameInstance::CreateSession()
     }
 
     TSharedPtr<FOnlineSessionSettings> SessionSettings = MakeShareable(new FOnlineSessionSettings());
-    SessionSettings->bAllowJoinInProgress = true;
-	SessionSettings->bIsDedicated = false;		
-    SessionSettings->bIsLANMatch = true;		
-    SessionSettings->bShouldAdvertise = true;		
-    SessionSettings->NumPublicConnections = 4;	
+	SessionSettings->bAllowJoinInProgress = true;	// 게임 중에도 참여 가능
+	SessionSettings->bIsLANMatch = true;		    // LAN 게임으로 설정  
+	SessionSettings->NumPublicConnections = 4;	    // 최대 플레이어 수 설정
+    SessionSettings->bShouldAdvertise = true;	    // 검색 허용
 
+	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+
+	//SessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), FName("GameSession"), *SessionSettings);
 	SessionInterface->CreateSession(0, FName("GameSession"), *SessionSettings);
 }
 
@@ -74,7 +77,7 @@ void USMGameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSucces
             case NM_ListenServer:
             case NM_DedicatedServer:
                 UE_LOG(LogTemp, Log, TEXT("[OnCreateSessionComplete] Running as server. Starting ServerTravel."));
-                World->ServerTravel("/Game/Level/TestMap?listen");
+                //World->ServerTravel("/Game/Level/TestMap?listen");
                 break;
 
             case NM_Client:
@@ -105,18 +108,23 @@ void USMGameInstance::FindSession()
 {
     if (!SessionInterface.IsValid()) return;
 
+    UE_LOG(LogTemp, Warning, TEXT("NetMode: %d"), GetWorld()->GetNetMode());
+
     SessionSearch = MakeShareable(new FOnlineSessionSearch());
 
     SessionSearch->bIsLanQuery = true;
     SessionSearch->MaxSearchResults = 100;
-    SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals); 
+    //SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals); 
 
+    const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+
+	//SessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), SessionSearch.ToSharedRef());
 	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
 void USMGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 {
-    if (bWasSuccessful)
+    if (bWasSuccessful && SessionSearch.IsValid())
     {
 		TArray<FOnlineSessionSearchResult> SearchResults = SessionSearch->SearchResults;
 

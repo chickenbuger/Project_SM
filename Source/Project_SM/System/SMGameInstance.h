@@ -63,5 +63,6 @@ private:
 
 private:
     IOnlineSessionPtr SessionInterface;
+
     TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
